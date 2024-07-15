@@ -23,7 +23,7 @@
 
 #include <EEPROM.h>
 #include <TFT_eSPI.h>
-#include <SPI.h>
+// #include <SPI.h>
 
 //#################################################
 //#################################################
@@ -43,9 +43,10 @@ unsigned short txtFont = 2;     // Selecting font. For more information search f
 
 // Other pin definition
 //. . . . . . . . . . . . . . . . . . . . . . . . . . .
+
 #define HallEffectSensor 2
 #define buttonLeft 5
-#define buttonMid 4
+// #define buttonMid 4    // Not used for this version. But will used new versions
 #define buttonRight 3
 //. . . . . . . . . . . . . . . . . . . . . . . . . . .
 
@@ -76,23 +77,6 @@ unsigned long lastButtonPressTime = 0;
 
 //################# INITIALIZIONS #################
 //#################################################
-
-
-// Variables for calculating and tracking time
-//. . . . . . . . . . . . . . . . . . . . . . . . . . .
-unsigned long seconds = 0;
-unsigned long minutes = 0;
-unsigned long hours = 0;
-//. . . . . . . . . . . . . . . . . . . . . . . . . . .
-
-
-// All string variables
-//. . . . . . . . . . . . . . . . . . . . . . . . . . .
-String speedStr;
-String maxSpeedStr;
-String avgSpeedStr;
-String totalDistanceStr;
-//. . . . . . . . . . . . . . . . . . . . . . . . . . .
 
 
 // Misc
@@ -133,8 +117,8 @@ const float F_W_DIAMETER = 66.04;
 
 void setup() {
 
-  Serial.begin(9600);                                // Set Serial connection for debug
-  Serial.println("Serial Connection Initialized!");  // Write "TFT Screen Initialized!" if
+  // Serial.begin(9600);                                // Set Serial connection for debug
+  // Serial.println("Serial Connection Initialized!");  // Write "TFT Screen Initialized!" if
 
   pinMode(HallEffectSensor, INPUT_PULLUP);  // Set pin mode for hall effect sensor
   pinMode(buttonRight, INPUT_PULLUP);            // Set pin mode for right button
@@ -146,8 +130,6 @@ void setup() {
   tftScreen.init();
   tftScreen.fillScreen(TFT_BLACK);  // Ekranı temizle
   tftScreen.setRotation(2);
-  // mainMenuStatics(5, 0, 70, 0, 50, 50, 5, 115, 70, 115);
-  currentState = MENU_MAIN;
   displayMenuStatic(currentState);
   displayMenuDynamic(currentState);
 
@@ -219,10 +201,10 @@ ISR(PCINT2_vect) {
       displayMenuStatic(currentState);
     } else if (digitalRead(buttonRight) == LOW) {
       nextMenu();
-      displayMenuStatic(currentState); 
-    } else if (digitalRead(buttonMid) == LOW) {
-       resetAll();
-    }
+      displayMenuStatic(currentState); }
+    // else if (digitalRead(buttonMid) == LOW) {
+    //   resetAll();
+    // }
 
     lastButtonPressTime = currentTime;
   }
@@ -236,6 +218,12 @@ void nextMenu() {
         case MENU_AVG:
             currentState = MENU_MAIN;
             break;
+        // case MENU_AVG:
+        //     currentState = MENU_SETTINGS;
+        //     break;
+        // case MENU_SETTINGS:
+        //     currentState = MENU_MAIN;
+        //     break;
     }
 }
 
@@ -244,14 +232,22 @@ void previousMenu() {
         case MENU_MAIN:
             currentState = MENU_AVG;
             break;
+        // case MENU_MAIN:
+        //     currentState = MENU_SETTINGS;
+        //     break;
         case MENU_AVG:
             currentState = MENU_MAIN;
             break;
+        // case MENU_SETTINGS:
+        //     currentState = MENU_AVG;
+        //     break;
     }
 }
 
 void displayMenuStatic(MenuState state) {
   tftScreen.fillScreen(TFT_BLACK);  // Clear the screen
+
+  
 
   switch (state) {
       case MENU_MAIN:
@@ -260,6 +256,8 @@ void displayMenuStatic(MenuState state) {
       case MENU_AVG:
         mainMenuStatics(5, 0, 70, 0, 70, 115, 5, 115, 53, 50);
         break;
+      // case MENU_SETTINGS:
+      //   break;
   }
 }
 
@@ -271,6 +269,8 @@ void displayMenuDynamic(MenuState state) {
       case MENU_AVG:
           mainMenuDynamic(5, 13, 126, 13, 70, 140, 5, 130, 86, 70);
           break;
+      // case MENU_SETTINGS:
+      //     break;
   }
 }
 
@@ -342,6 +342,13 @@ void mainMenuDynamic(int spd_x, int spd_y, int max_x, int max_y, int time_x, int
 
   tftScreen.setTextSize(2);
 
+  // Variables for calculating and tracking time
+  //. . . . . . . . . . . . . . . . . . . . . . . . . . .
+  unsigned long seconds = 0;
+  unsigned long minutes = 0;
+  unsigned long hours = 0;
+  //. . . . . . . . . . . . . . . . . . . . . . . . . . .
+
   // Write the texts
   //-----------------------------------------------------
 
@@ -368,21 +375,13 @@ void mainMenuDynamic(int spd_x, int spd_y, int max_x, int max_y, int time_x, int
   tftScreen.drawFloat(fAvgSpeed, 1, avg_x, avg_y, txtFont);
   tftScreen.setTextDatum(TL_DATUM);
 
-
-
-    switch (currentState) {
-      case MENU_MAIN:
-        tftScreen.setTextSize(2);
-        break;
-      case MENU_AVG:
-        tftScreen.setTextSize(1);
-        break;
-    }
-
+  if (currentState == MENU_AVG) {
+    tftScreen.setTextSize(1);
+  }
 
   padding = tftScreen.textWidth("99.99.99", txtFont);
   tftScreen.setTextPadding(padding);
-  tftScreen.drawString(time, time_x, time_y, txtFont);
+  tftScreen.drawString(time, time_x,  time_y, txtFont);
 
 
   //-----------------------------------------------------
@@ -401,6 +400,7 @@ void mainMenuStatics(int spd_x, int spd_y, int max_x, int max_y, int time_x, int
   tftScreen.drawFastVLine(64, 0, 45, TFT_ORANGE);
   tftScreen.drawFastHLine(0, 115, 128, TFT_ORANGE);
   tftScreen.drawFastVLine(64, 115, 45, TFT_ORANGE);
+
 
   tftScreen.setTextColor(TFT_MAGENTA);
 
