@@ -15,13 +15,13 @@
 ||     / _` | |  _| ' \ || | '_ \/ /| '_ \/ -_|_-<  _| ' \/ _ \/ _ \ '_ \/ / |_ \ |      ||
 ||     \__, |_|\__|_||_\_,_|_.__/_/ |_.__/\___/__/\__|_||_\___/\___/_.__/___|___/_|      ||
 ||     |___/                                                                             ||
-||                                                                                       ||
+||											 ||
 ||_______________________________________________________________________________________||
 ||_______________________________________________________________________________________||
 
 
 
-		# Bicycle Computer wArduino v1
+		# Bicycle Computer w/Arduino v2.0.1
 
 		# released on 15 January 2024
 		
@@ -38,4 +38,6 @@
 	our own entertainment. This project will be always non-commercial, cheap to build and 
 	easy to create for have fun and learn something new.
 
+		
+		
 		
