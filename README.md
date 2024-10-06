@@ -14,10 +14,10 @@
 	
 	*/ What is This Project for?
 	
-		* This project aims to make cheap and easy versions of bicycle computers. We (as a
-	cyclists) don't need the money-hungry corpo's high-end cycling computers for pursue to
-	our own entertainment. This project will be always non-commercial, cheap to build and 
-	easy to create for have fun and learn something new.
+		* This project aims to make cheap and easy versions of bicycle computers.
+  	We (as a cyclists) don't need the money-hungry corpo's high-end cycling computers
+   	for pursue to our own entertainment. This project will be always non-commercial,
+    	cheap to build and easy to create for have fun and learn something new.
 
 		
 		
